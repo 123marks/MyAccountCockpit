@@ -791,7 +791,6 @@ export function QoderAccountsPage() {
     storageKey: buildPaginationPageSizeStorageKey('Qoder'),
   });
   const paginatedAccounts = pagination.pageItems;
-  const paginatedIds = useMemo(() => paginatedAccounts.map((item) => item.id), [paginatedAccounts]);
   const paginatedGroupedAccounts = useMemo(
     () => buildPaginatedGroups(groupedAccounts, paginatedAccounts),
     [groupedAccounts, paginatedAccounts],
@@ -800,7 +799,7 @@ export function QoderAccountsPage() {
     () => filteredIds.filter((id) => selected.has(id)).length,
     [filteredIds, selected],
   );
-  const allSelected = isEveryIdSelected(selected, paginatedIds);
+  const allSelected = isEveryIdSelected(selected, filteredIds);
 
   const toggleSelect = useCallback((id: string) => {
     setSelected((prev) => {
@@ -812,18 +811,18 @@ export function QoderAccountsPage() {
   }, []);
 
   const toggleSelectAll = useCallback(() => {
-    if (paginatedIds.length === 0) return;
+    if (filteredIds.length === 0) return;
     setSelected((prev) => {
       const next = new Set(prev);
-      const pageFullySelected = paginatedIds.every((id) => next.has(id));
-      if (pageFullySelected) {
-        paginatedIds.forEach((id) => next.delete(id));
+      const filteredFullySelected = filteredIds.every((id) => next.has(id));
+      if (filteredFullySelected) {
+        filteredIds.forEach((id) => next.delete(id));
       } else {
-        paginatedIds.forEach((id) => next.add(id));
+        filteredIds.forEach((id) => next.add(id));
       }
       return next;
     });
-  }, [paginatedIds]);
+  }, [filteredIds]);
 
   const togglePrivacyMode = useCallback(() => {
     setPrivacyModeEnabled((prev) => {

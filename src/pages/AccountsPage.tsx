@@ -933,17 +933,17 @@ export function AccountsPage({ onNavigate }: AccountsPageProps) {
     storageKey: buildPaginationPageSizeStorageKey('accounts'),
   })
   const paginatedAccounts = pagination.pageItems
-  const paginatedIds = useMemo(
-    () => paginatedAccounts.map((account) => account.id),
-    [paginatedAccounts]
+  const filteredIds = useMemo(
+    () => filteredAccounts.map((account) => account.id),
+    [filteredAccounts]
   )
   const paginatedGroupedAccounts = useMemo(
     () => buildPaginatedGroups(groupedAccounts, paginatedAccounts),
     [groupedAccounts, paginatedAccounts]
   )
-  const allPaginatedSelected = useMemo(
-    () => isEveryIdSelected(selected, paginatedIds),
-    [paginatedIds, selected]
+  const allFilteredSelected = useMemo(
+    () => isEveryIdSelected(selected, filteredIds),
+    [filteredIds, selected]
   )
 
   const hasVisibleAccountGroups = useMemo(
@@ -1906,9 +1906,9 @@ export function AccountsPage({ onNavigate }: AccountsPageProps) {
   }
 
   const handleExport = async () => {
-    const visibleIdSet = new Set(filteredAccounts.map((account) => account.id))
+    const visibleIdSet = new Set(filteredIds)
     const selectedVisibleIds = Array.from(selected).filter((id) => visibleIdSet.has(id))
-    const ids = selectedVisibleIds.length > 0 ? selectedVisibleIds : filteredAccounts.map((account) => account.id)
+    const ids = selectedVisibleIds.length > 0 ? selectedVisibleIds : filteredIds
     if (ids.length === 0) return
     await exportModal.startExport(ids)
   }
@@ -1926,14 +1926,14 @@ export function AccountsPage({ onNavigate }: AccountsPageProps) {
   }
 
   const toggleSelectAll = () => {
-    if (paginatedIds.length === 0) return
+    if (filteredIds.length === 0) return
     setSelected((prev) => {
       const next = new Set(prev)
-      const pageFullySelected = paginatedIds.every((id) => next.has(id))
-      if (pageFullySelected) {
-        paginatedIds.forEach((id) => next.delete(id))
+      const filteredFullySelected = filteredIds.every((id) => next.has(id))
+      if (filteredFullySelected) {
+        filteredIds.forEach((id) => next.delete(id))
       } else {
-        paginatedIds.forEach((id) => next.add(id))
+        filteredIds.forEach((id) => next.add(id))
       }
       return next
     })
@@ -2601,7 +2601,7 @@ export function AccountsPage({ onNavigate }: AccountsPageProps) {
             <label style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: 'var(--text-color)' }}>
               <input
                 type="checkbox"
-                checked={allPaginatedSelected}
+                checked={allFilteredSelected}
                 onChange={toggleSelectAll}
               />
               {t('common.selectAll', '全选')}
@@ -3161,7 +3161,7 @@ export function AccountsPage({ onNavigate }: AccountsPageProps) {
             <th style={{ width: 40 }}>
               <input
                 type="checkbox"
-                checked={allPaginatedSelected}
+                checked={allFilteredSelected}
                 onChange={toggleSelectAll}
               />
             </th>

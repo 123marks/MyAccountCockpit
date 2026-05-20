@@ -360,10 +360,9 @@ export function GitHubCopilotAccountsPage() {
     storageKey: buildPaginationPageSizeStorageKey('GitHubCopilot'),
   });
   const paginatedAccounts = pagination.pageItems;
-  const paginatedIds = useMemo(() => paginatedAccounts.map((account) => account.id), [paginatedAccounts]);
-  const isAllPaginatedSelected = useMemo(
-    () => isEveryIdSelected(selected, paginatedIds),
-    [paginatedIds, selected],
+  const isAllFilteredSelected = useMemo(
+    () => isEveryIdSelected(selected, filteredIds),
+    [filteredIds, selected],
   );
 
   const groupedAccounts = useMemo(() => {
@@ -1024,7 +1023,7 @@ export function GitHubCopilotAccountsPage() {
           {paginatedAccounts.length > 0 && (
             <div className="grid-view-header" style={{ marginBottom: '12px', paddingLeft: '4px' }}>
               <label style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: 'var(--text-color)' }}>
-                <input type="checkbox" checked={isAllPaginatedSelected} onChange={() => toggleSelectAll(paginatedIds)} />
+                <input type="checkbox" checked={isAllFilteredSelected} onChange={() => toggleSelectAll(filteredIds)} />
                 {t('common.selectAll', '全选')}
               </label>
             </div>
@@ -1057,8 +1056,8 @@ export function GitHubCopilotAccountsPage() {
                 <th style={{ width: 40 }}>
                   <input
                     type="checkbox"
-                    checked={isAllPaginatedSelected}
-                    onChange={() => toggleSelectAll(paginatedIds)}
+                    checked={isAllFilteredSelected}
+                    onChange={() => toggleSelectAll(filteredIds)}
                   />
                 </th>
                 <th style={{ width: 260 }}>{t('common.shared.columns.email', '账号')}</th>
@@ -1094,8 +1093,8 @@ export function GitHubCopilotAccountsPage() {
                 <th style={{ width: 40 }}>
                   <input
                     type="checkbox"
-                    checked={isAllPaginatedSelected}
-                    onChange={() => toggleSelectAll(paginatedIds)}
+                    checked={isAllFilteredSelected}
+                    onChange={() => toggleSelectAll(filteredIds)}
                   />
                 </th>
                 <th style={{ width: 260 }}>{t('common.shared.columns.email', '账号')}</th>

@@ -8,6 +8,7 @@
     "typecheck": "tsc --noEmit",
     "prebuild": "npm run typecheck",
     "build": "npm run sync-version && tsc && vite build",
+    "verify:select-all-scope": "node scripts/verify-select-all-scope.cjs",
     "release:preflight": "node scripts/release/preflight.cjs",
     "preview": "vite preview",
     "pretauri": "npm run typecheck",

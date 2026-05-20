@@ -758,13 +758,9 @@ export function GeminiAccountsPage() {
     storageKey: buildPaginationPageSizeStorageKey("Gemini"),
   });
   const paginatedAccounts = pagination.pageItems;
-  const paginatedIds = useMemo(
-    () => paginatedAccounts.map((account) => account.id),
-    [paginatedAccounts],
-  );
-  const isAllPaginatedSelected = useMemo(
-    () => isEveryIdSelected(selected, paginatedIds),
-    [paginatedIds, selected],
+  const isAllFilteredSelected = useMemo(
+    () => isEveryIdSelected(selected, filteredIds),
+    [filteredIds, selected],
   );
 
   const groupedAccounts = useMemo(() => {
@@ -1534,8 +1530,8 @@ export function GeminiAccountsPage() {
                   >
                     <input
                       type="checkbox"
-                      checked={isAllPaginatedSelected}
-                      onChange={() => toggleSelectAll(paginatedIds)}
+                      checked={isAllFilteredSelected}
+                      onChange={() => toggleSelectAll(filteredIds)}
                     />
                     {t("common.selectAll", "全选")}
                   </label>
@@ -1573,8 +1569,8 @@ export function GeminiAccountsPage() {
                     <th style={{ width: 40 }}>
                       <input
                         type="checkbox"
-                        checked={isAllPaginatedSelected}
-                        onChange={() => toggleSelectAll(paginatedIds)}
+                        checked={isAllFilteredSelected}
+                        onChange={() => toggleSelectAll(filteredIds)}
                       />
                     </th>
                     <th style={{ width: 240 }}>
@@ -1619,8 +1615,8 @@ export function GeminiAccountsPage() {
                     <th style={{ width: 40 }}>
                       <input
                         type="checkbox"
-                        checked={isAllPaginatedSelected}
-                        onChange={() => toggleSelectAll(paginatedIds)}
+                        checked={isAllFilteredSelected}
+                        onChange={() => toggleSelectAll(filteredIds)}
                       />
                     </th>
                     <th style={{ width: 240 }}>

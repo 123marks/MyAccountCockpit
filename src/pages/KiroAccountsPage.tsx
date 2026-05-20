@@ -510,10 +510,9 @@ export function KiroAccountsPage() {
     storageKey: buildPaginationPageSizeStorageKey('Kiro'),
   });
   const paginatedAccounts = pagination.pageItems;
-  const paginatedIds = useMemo(() => paginatedAccounts.map((account) => account.id), [paginatedAccounts]);
-  const isAllPaginatedSelected = useMemo(
-    () => isEveryIdSelected(selected, paginatedIds),
-    [paginatedIds, selected],
+  const isAllFilteredSelected = useMemo(
+    () => isEveryIdSelected(selected, filteredIds),
+    [filteredIds, selected],
   );
 
   const groupedAccounts = useMemo(() => {
@@ -1008,7 +1007,7 @@ export function KiroAccountsPage() {
           {paginatedAccounts.length > 0 && (
             <div className="grid-view-header" style={{ marginBottom: '12px', paddingLeft: '4px' }}>
               <label style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: 'var(--text-color)' }}>
-                <input type="checkbox" checked={isAllPaginatedSelected} onChange={() => toggleSelectAll(paginatedIds)} />
+                <input type="checkbox" checked={isAllFilteredSelected} onChange={() => toggleSelectAll(filteredIds)} />
                 {t('common.selectAll', '全选')}
               </label>
             </div>
@@ -1035,7 +1034,7 @@ export function KiroAccountsPage() {
             <thead>
               <tr>
                 <th style={{ width: 40 }}>
-                  <input type="checkbox" checked={isAllPaginatedSelected} onChange={() => toggleSelectAll(paginatedIds)} />
+                  <input type="checkbox" checked={isAllFilteredSelected} onChange={() => toggleSelectAll(filteredIds)} />
                 </th>
                 <th style={{ width: 240 }}>{t('common.shared.columns.email', '邮箱')}</th>
                 <th style={{ width: 120 }}>{t('common.shared.columns.plan', '计划')}</th>
@@ -1067,7 +1066,7 @@ export function KiroAccountsPage() {
             <thead>
               <tr>
                 <th style={{ width: 40 }}>
-                  <input type="checkbox" checked={isAllPaginatedSelected} onChange={() => toggleSelectAll(paginatedIds)} />
+                  <input type="checkbox" checked={isAllFilteredSelected} onChange={() => toggleSelectAll(filteredIds)} />
                 </th>
                 <th style={{ width: 240 }}>{t('common.shared.columns.email', '邮箱')}</th>
                 <th style={{ width: 120 }}>{t('common.shared.columns.plan', '计划')}</th>

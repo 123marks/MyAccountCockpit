@@ -241,17 +241,13 @@ export function CodebuddySuiteAccountsSharedView<TAccount extends CodebuddySuite
     storageKey: buildPaginationPageSizeStorageKey(platformConfig.quickSettingsType),
   });
   const paginatedAccounts = pagination.pageItems;
-  const paginatedIds = useMemo(
-    () => paginatedAccounts.map((account) => account.id),
-    [paginatedAccounts],
-  );
   const paginatedGroupedAccounts = useMemo(
     () => buildPaginatedGroups(groupedAccounts, paginatedAccounts),
     [groupedAccounts, paginatedAccounts],
   );
-  const isAllPaginatedSelected = useMemo(
-    () => isEveryIdSelected(selected, paginatedIds),
-    [paginatedIds, selected],
+  const isAllFilteredSelected = useMemo(
+    () => isEveryIdSelected(selected, filteredIds),
+    [filteredIds, selected],
   );
 
   const resolveGroupLabel = (groupKey: string) =>
@@ -543,7 +539,7 @@ export function CodebuddySuiteAccountsSharedView<TAccount extends CodebuddySuite
           {paginatedAccounts.length > 0 && (
             <div className="grid-view-header" style={{ marginBottom: '12px', paddingLeft: '4px' }}>
               <label style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: 'var(--text-color)' }}>
-                <input type="checkbox" checked={isAllPaginatedSelected} onChange={() => toggleSelectAll(paginatedIds)} />
+                <input type="checkbox" checked={isAllFilteredSelected} onChange={() => toggleSelectAll(filteredIds)} />
                 {t('common.selectAll', '全选')}
               </label>
             </div>
@@ -569,7 +565,7 @@ export function CodebuddySuiteAccountsSharedView<TAccount extends CodebuddySuite
           <table className="account-table">
             <thead>
               <tr>
-                <th style={{ width: 40 }}><input type="checkbox" checked={isAllPaginatedSelected} onChange={() => toggleSelectAll(paginatedIds)} /></th>
+                <th style={{ width: 40 }}><input type="checkbox" checked={isAllFilteredSelected} onChange={() => toggleSelectAll(filteredIds)} /></th>
                 <th style={{ width: 240 }}>{t('common.shared.columns.email', '邮箱')}</th>
                 <th style={{ width: 120 }}>{t('common.shared.columns.plan', '套餐')}</th>
                 <th>{t('instances.labels.quota', '配额')}</th>
@@ -591,7 +587,7 @@ export function CodebuddySuiteAccountsSharedView<TAccount extends CodebuddySuite
           <table className="account-table">
             <thead>
               <tr>
-                <th style={{ width: 40 }}><input type="checkbox" checked={isAllPaginatedSelected} onChange={() => toggleSelectAll(paginatedIds)} /></th>
+                <th style={{ width: 40 }}><input type="checkbox" checked={isAllFilteredSelected} onChange={() => toggleSelectAll(filteredIds)} /></th>
                 <th style={{ width: 240 }}>{t('common.shared.columns.email', '邮箱')}</th>
                 <th style={{ width: 120 }}>{t('common.shared.columns.plan', '套餐')}</th>
                 <th>{t('instances.labels.quota', '配额')}</th>
