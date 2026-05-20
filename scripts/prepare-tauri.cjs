@@ -37,5 +37,7 @@ if (result.status !== 0) {
   if (result.stderr) {
     process.stderr.write(result.stderr);
   }
-  process.exit(result.status ?? 1);
+  process.stderr.write(
+    'Skipping stale Cockpit Tools debug process cleanup; process inspection is not available in this environment.\n'
+  );
 }

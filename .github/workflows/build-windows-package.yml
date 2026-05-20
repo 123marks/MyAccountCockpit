@@ -1,0 +1,62 @@
+name: Build Windows Package
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - fix/tag-filter-select-all
+
+concurrency:
+  group: build-windows-package-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Windows package
+    runs-on: windows-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Rust setup
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Node.js setup
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Verify select-all scope
+        run: npm run verify:select-all-scope
+
+      - name: Disable updater artifacts for unsigned fork package
+        shell: pwsh
+        run: |
+          $configPath = "src-tauri/tauri.conf.json"
+          $config = Get-Content $configPath -Raw | ConvertFrom-Json
+          $config.bundle.createUpdaterArtifacts = $false
+          $config | ConvertTo-Json -Depth 100 | Set-Content $configPath -Encoding utf8
+
+      - name: Build Windows package
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx tauri build --ci
+
+      - name: Upload Windows package
+        uses: actions/upload-artifact@v4
+        with:
+          name: cockpit-tools-windows-fixed
+          retention-days: 7
+          if-no-files-found: error
+          path: |
+            target/release/cockpit-tools.exe
+            target/release/bundle/**/*
+            src-tauri/target/release/cockpit-tools.exe
+            src-tauri/target/release/bundle/**/*
